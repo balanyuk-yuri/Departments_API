@@ -1,0 +1,45 @@
+== Rest convention
+include::rest_conv.adoc[]
+== Endpoints
+=== Department
+==== Get department by ID
+===== HTTP Request
+include::{snippets}/get-department-example/http-request.adoc[]
+=====Path Parameters
+include::{snippets}/get-department-example/path-parameters.adoc[]
+===== HTTP Response
+====== Success HTTP responses
+include::{snippets}/get-department-example/http-response.adoc[]
+
+==== Get departments by parent ID
+===== HTTP Request
+include::{snippets}/get-departments-within-parent-example/http-request.adoc[]
+=====Request Parameters
+include::{snippets}/get-departments-within-parent-example/request-parameters.adoc[]
+====== Success HTTP responses
+include::{snippets}/get-departments-within-parent-example/http-response.adoc[]
+
+==== Create department
+===== HTTP Request
+include::{snippets}/create-department-example/http-request.adoc[]
+===== HTTP Response
+====== Success HTTP responses
+include::{snippets}/create-department-example/http-response.adoc[]
+
+==== Update department
+===== HTTP Request
+include::{snippets}/update-department-example/http-request.adoc[]
+=====Path Parameters
+include::{snippets}/update-department-example/path-parameters.adoc[]
+===== HTTP Response
+====== Success HTTP responses
+include::{snippets}/update-department-example/http-response.adoc[]
+
+==== Close department
+===== HTTP Request
+include::{snippets}/close-department-example/http-request.adoc[]
+=====Path Parameters
+include::{snippets}/close-department-example/path-parameters.adoc[]
+===== HTTP Response
+====== Success HTTP responses
+include::{snippets}/close-department-example/http-response.adoc[]
