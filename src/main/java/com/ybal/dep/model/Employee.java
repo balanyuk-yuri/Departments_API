@@ -51,6 +51,8 @@ public class Employee {
 
     @NotAudited
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     List<Certificate> certificates = new ArrayList<>();
 
     public Long getId() {

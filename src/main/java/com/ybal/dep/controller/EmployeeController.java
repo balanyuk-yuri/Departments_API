@@ -8,6 +8,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,21 +26,23 @@ public class EmployeeController extends BaseController{
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping(empPrefix + "/{id}")
+    @GetMapping({"/guest" + empPrefix + "/{id}" ,empPrefix + "/{id}"})
     public Employee employee(@PathVariable("id") Long depId){
         return employeeService.employee(depId);
     }
 
-    @GetMapping(empPrefix)
+    @GetMapping({"/guest" + empPrefix, empPrefix})
     public List<Employee> employeesOf(@RequestParam(name = "depId") Long depId){
         return employeeService.employeesOf(depId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMP_MANAGER')")
     @PostMapping(empPrefix)
     public Employee addNewEmployee(@RequestBody Employee emp){
         return employeeService.addNewEmployee(emp);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMP_MANAGER')")
     @PutMapping(empPrefix + "/{id}")
     public Employee updateEmployee(@PathVariable("id") Long empId,
                                    @RequestBody Employee employee){
@@ -50,6 +53,7 @@ public class EmployeeController extends BaseController{
                 employee.getSalary());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMP_MANAGER')")
     @PutMapping(empPrefix + "/{id}/addCert")
     public Certificate addEmployeeCertificate(@PathVariable("id") Long empId,
                                               @RequestPart Certificate certificate,
@@ -58,6 +62,7 @@ public class EmployeeController extends BaseController{
         return employeeService.addEmployeeCertificate(empId, certificate);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMP_MANAGER')")
     @GetMapping(certPrefix + "/{id}")
     public void certificateImage(@PathVariable("id") Long id ,
                                  HttpServletResponse response) throws IOException {
@@ -66,11 +71,13 @@ public class EmployeeController extends BaseController{
         IOUtils.copy(in, response.getOutputStream());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMP_MANAGER')")
     @DeleteMapping(empPrefix)
     public boolean freeEmployee(@RequestParam(value = "empId") Long empId){
         return employeeService.freeEmployee(empId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMP_MANAGER')")
     @GetMapping(empPrefix + "/history")
     public List<JSONObject> employeeHistory(@RequestParam(value = "id", required = false) Long id,
                                             @RequestParam(value = "from", required = false) @DateTimeFormat(pattern="ddMMyyyy") Date from,

@@ -6,6 +6,7 @@ import net.minidev.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -17,21 +18,23 @@ public class DepartmentsController extends BaseController {
     private DepartmentService departmentService;
     private final static String depPrefix = "/dep";
 
-    @GetMapping(depPrefix + "/{id}")
+    @GetMapping({"/guest" + depPrefix + "/{id}", depPrefix + "/{id}"})
     public Department department(@PathVariable Long id) {
         return departmentService.department(id);
     }
 
-    @GetMapping(depPrefix)
+    @GetMapping({"/guest" + depPrefix, depPrefix})
     public List<Department> departmentsOf(@RequestParam(value="parentId", required = false)Long parentId) {
         return departmentService.departmentsOf(parentId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEP_MANAGER')")
     @PostMapping(depPrefix)
     public Department createDepartment(@RequestBody Department department){
         return departmentService.createDepartment(department);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEP_MANAGER')")
     @PutMapping(depPrefix + "/{id}")
     public Department updateDepartment(@PathVariable("id") Long depId,
                                        @RequestBody Department department){
@@ -40,11 +43,13 @@ public class DepartmentsController extends BaseController {
                 department.getChief() != null ? department.getChief().getId() : null);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEP_MANAGER')")
     @DeleteMapping(depPrefix + "/{id}")
     public boolean closeDepartment(@PathVariable("id") Long depId){
         return departmentService.closeDepartment(depId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DEP_MANAGER')")
     @GetMapping(depPrefix + "/history")
     public List<JSONObject> departmentHistory(@RequestParam(value = "id", required = false) Long id,
                                               @RequestParam(value = "from", required = false) @DateTimeFormat(pattern="ddMMyyyy")Date from,
